@@ -1,6 +1,14 @@
 # podmania
 
 ## install podman
+
+* Ubuntu 20.10 and newer:
+* sudo apt-get update
+* sudo apt-get -y install podman
+* test: podman run --name basic_httpd -dt -p 8080:80/tcp docker.io/nginx -> podman ps -> podman stop .. -> podman rm ..
+
+## install podman-compose
+
 * sudo apt install pipx
 * pipx install podman-compose
 * podman-compose version
