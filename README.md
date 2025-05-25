@@ -9,8 +9,8 @@
 * sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $USER
 
 ## run podman
-podman-compose up -d
-podman-compose down
+* podman-compose up -d
+* podman-compose down
 
 * use yml files in this repo
 
