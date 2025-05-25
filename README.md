@@ -5,7 +5,7 @@
 * pipx install podman-compose
 * podman-compose version
 
-## Setting up a non-root user
+## setting up a non-root user
 * sudo usermod --add-subuids 100000-165535 --add-subgids 100000-165535 $USER
 
 ## run podman
@@ -14,7 +14,7 @@
 
 * use yml files in this repo
 
-## why podman
+## why podman?
 * beause docker wants to be runned as sudo
 
 ## sources
