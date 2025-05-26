@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: docker.io/mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
+    volumes:
+      - ./mysql/lib:/var/lib/mysql
+      - ./mysql/log:/var/log/mysql
+
+  phpmyadmin:
+    image: docker.io/phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+    depends_on:
+      - mysql
+
+  adminer:
+    image: docker.io/adminer
+    ports:
+      - "8081:8080"
+
+  apache:
+    image: docker.io/httpd:2.4
+    volumes:
+      - ./front:/usr/local/apache2/htdocs/
+    depends_on:
+      - springboot
+    expose:
+      - "80"
+
+  springboot:
+    image: docker.io/eclipse-temurin:17-jdk-alpine
+    command: ["java", "-jar", "/app/myapp.jar"]
+    volumes:
+      - ./springboot-app/myapp.jar:/app/myapp.jar
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: userpassword
+    depends_on:
+      - mysql
+    expose:
+      - "8080"
+
+  reverse-proxy:
+    image: docker.io/nginx:alpine
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - apache
+      - springboot
