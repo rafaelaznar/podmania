@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+
+  apache:
+    image: docker.io/httpd:2.4
+    volumes:
+      - ./html:/usr/local/apache2/htdocs/
+    expose:
+      - "80"
+
+  reverse-proxy:
+    image: docker.io/nginx:alpine
+    ports:
+      - "8080:80"   # HTTP
+      - "8443:443"  # HTTPS
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
+    depends_on:
+      - apache
+
